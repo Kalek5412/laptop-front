@@ -1,0 +1,129 @@
+<div class="container mb-3">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Marca</th>
+                <th scope="col">Modelo</th>
+                <th scope="col">version</th>
+                <th scope="col">nuevo</th>
+                <th scope="col">color</th>
+                <th scope="col">precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let lap of laptops">
+                <td>{{lap.modelo.marca.nombre}}</td>
+                <td>{{lap.modelo.nombre}}</td>
+                <td>{{lap.version}}</td>
+                <td *ngIf="lap.nuevo">Fabrica</td>
+                <td *ngIf="!lap.nuevo">Comercial</td>
+                <td>{{lap.color}}</td>
+                <td>{{lap.precio}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="container mb-5">
+    <form action="">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="marcaElegida"><b>Marca: </b></label>
+                    <select class="form-control" name="marcaElegida" id="marcaElegida" [(ngModel)]="marcaElegida"
+                        (change)="onChangeMarca()">
+                        <option [ngValue]="null" selected>Elige la marca</option>
+                        <option [ngValue]="marca" *ngFor="let marca of marcas">{{marca.nombre}}</option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="modelo"><b>Modelo: </b></label>
+                    <!--null-->
+                    <select *ngIf="!marcaElegida" class="form-control" name="modelo" id="modelo" disabled>
+                        <option value="''" selected>Elige modelo</option>                      
+                    </select>
+                     <!-- no -null-->
+                    <select *ngIf="marcaElegida" class="form-control" name="modelo" id="modelo"
+                        [(ngModel)]="busqueda.modelo" (change)="listarLaptops()">
+                        <option [ngValue]="''" selected>Elige modelo</option>
+                        <option [ngValue]="modelo.nombre" *ngFor="let modelo of marcaElegida.modelos">{{modelo.nombre}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="version"><b>Version: </b></label>
+                    <div class="input-group">
+                        <button class="btn btn-outline-danger"(click)="clearVersion()"  [disabled]="!busqueda.version"  >Reset</button>
+                        <input type="text" class="form-control" name="version" id="version" [(ngModel)]="busqueda.version">
+                        <button class="btn btn-outline-success" (click)="listarLaptops()" [disabled]="!busqueda.version">Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="precioDesde"><b>desde: </b></label>
+                    <div class="input-group">
+                        <button class="btn btn-outline-danger" (click)="clearPrecioDesde()" 
+                        [disabled]="!busqueda.precioDesde">Reset</button>
+                        <input type="number" class="form-control" name="precioDesde" id="precioDesde" [(ngModel)]="busqueda.precioDesde">
+                        <button class="btn btn-outline-success"  (click)="listarLaptops()" [disabled]="!busqueda.precioDesde" >Buscar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="precioHasta"><b>hasta: </b></label>
+                    <div class="input-group">
+                        <button class="btn btn-outline-danger" (click)="clearPrecioHasta()" [disabled]="!busqueda.precioHasta">Reset</button>
+                        <input type="number" class="form-control" name="precioHasta" id="precioHasta" [(ngModel)]="busqueda.precioHasta" >
+                        <button class="btn btn-outline-success"  (click)="listarLaptops()"  [disabled]="!busqueda.precioHasta">Buscar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <label for="nuevo"><b>nuevo: </b></label>
+                <div class="form-control">
+                    <label class="radio-inline">
+                        <input type="radio" name="nuevo" id="nuevo" checked 
+                        [value]="''" [(ngModel)]="busqueda.nuevo" (change)="listarLaptops()"> Todos
+                    </label>
+                    &nbsp;
+                    <label class="radio-inline">
+                        <input type="radio" name="nuevo" id="nuevo"
+                        [value]="true" [(ngModel)]="busqueda.nuevo" (change)="listarLaptops()"> Fabrica
+                    </label>
+                    &nbsp;
+                    <label class="radio-inline">
+                        <input type="radio" name="nuevo" id="nuevo"
+                        [value]="false" [(ngModel)]="busqueda.nuevo" (change)="listarLaptops()"> Comercial
+                    </label>
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="color"><b>Color: </b></label>
+                    <select class="form-control" name="color" id="color" [(ngModel)]="busqueda.color" (change)="listarLaptops()">
+                        <option value="" selected>Color</option>
+                        <option value="blanco">Blanco</option>
+                        <option value="negro">Negro</option>
+                        <option value="gris">Gris</option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="col-4"></div>
+            <div class="col">
+                <label for="reset"><b>Reset: </b></label>
+                <button class="btn btn-outline-danger form-control" (click)="clear()">Borrar filtros</button>
+            </div>
+        </div>
+    </form>
+</div>
